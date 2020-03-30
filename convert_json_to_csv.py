@@ -4,15 +4,15 @@ import json
 import requests
 import time
 
-my_api_key = "d93cf23be9f207f17d4bfe48619f386d"
+my_api_key = "XXXXXXXXXXXXXXXXXXXXXXXXXXX"
 def convert_json_to_csv_china(input_file, output_file):
-    # schema = ["continent", "country", "province", "provinceLocationId", "provinceCurrentConfirmedCount",
-    #           "provinceConfirmedCount", "provinceSuspectedCount", "provinceCuredCount", "provinceDeadCount",
-    #           "cityName", "longitude", "latitude", "cityLocationId", "cityCurrentConfirmedCount",
-    #           "cityConfirmedCount", "citySuspectedCount", "cityCuredCount", "cityDeadCount", "updateTime"]
-    csv_file = open(output_file, "a")
+    schema = ["continent", "country", "province", "provinceLocationId", "provinceCurrentConfirmedCount",
+              "provinceConfirmedCount", "provinceSuspectedCount", "provinceCuredCount", "provinceDeadCount",
+              "cityName", "longitude", "latitude", "cityLocationId", "cityCurrentConfirmedCount",
+              "cityConfirmedCount", "citySuspectedCount", "cityCuredCount", "cityDeadCount", "updateTime"]
+    csv_file = open(output_file, "w+")
     writer = csv.writer(csv_file)
-    # writer.writerow(schema)
+    writer.writerow(schema)
 
     fp = open("./china_geo_coord.json", "r")
     china_geo_coord = json.load(fp)
@@ -33,45 +33,59 @@ def convert_json_to_csv_china(input_file, output_file):
             update_time = time.strftime("%Y-%m-%d %H:%M:%S", local_time)
             cities = data[i]["cities"]
 
-            for j in range(len(cities)):
-                city_data = cities[j]
-                city_name = city_data["cityName"]
-                if city_name in china_geo_coord:
-                    longitude = china_geo_coord[city_name][0]
-                    latitude = china_geo_coord[city_name][1]
-                    print("hahaha")
-                else:
-                    url = "https://restapi.amap.com/v3/geocode/geo?key=" + my_api_key + "&address=" + city_name
-                    result = requests.request('GET', url)
-                    result = result.json()
-                    if result["status"] == '0' or result["count"] == '0':
-                        longitude = "null"
-                        latitude = "null"
-                    else:
-                        longitude = result["geocodes"][0]["location"].split(",")[0]
-                        latitude = result["geocodes"][0]["location"].split(",")[1]
-                city_location_id = city_data["locationId"]
-                city_current_confirmed_count = city_data["currentConfirmedCount"]
-                city_confirmed_count = city_data["confirmedCount"]
-                city_suspected_count = city_data["suspectedCount"]
-                city_cured_count = city_data["curedCount"]
-                city_dead_count = city_data["deadCount"]
+            if len(cities) == 0:
+                city_location_id = "null"
+                city_current_confirmed_count = "null"
+                city_confirmed_count = "null"
+                city_suspected_count = "null"
+                city_cured_count = "null"
+                city_dead_count = "null"
                 row = [continent, country, province, province_location_id, province_current_confirmed_count,
                        province_confirmed_count, province_suspected_count, province_cured_count, province_dead_count,
                        city_name, longitude, latitude, city_location_id, city_current_confirmed_count,
                        city_confirmed_count, city_suspected_count, city_cured_count, city_dead_count, update_time]
+
                 writer.writerow(row)
+            else:
+                for j in range(len(cities)):
+                    city_data = cities[j]
+                    city_name = city_data["cityName"]
+                    if city_name in china_geo_coord:
+                        longitude = china_geo_coord[city_name][0]
+                        latitude = china_geo_coord[city_name][1]
+                    else:
+                        url = "https://restapi.amap.com/v3/geocode/geo?key=" + my_api_key + "&address=" + city_name
+                        result = requests.request('GET', url)
+                        result = result.json()
+                        if result["status"] == '0' or result["count"] == '0':
+                            longitude = "null"
+                            latitude = "null"
+                        else:
+                            longitude = result["geocodes"][0]["location"].split(",")[0]
+                            latitude = result["geocodes"][0]["location"].split(",")[1]
+                    city_location_id = city_data["locationId"]
+                    city_current_confirmed_count = city_data["currentConfirmedCount"]
+                    city_confirmed_count = city_data["confirmedCount"]
+                    city_suspected_count = city_data["suspectedCount"]
+                    city_cured_count = city_data["curedCount"]
+                    city_dead_count = city_data["deadCount"]
+                    row = [continent, country, province, province_location_id, province_current_confirmed_count,
+                           province_confirmed_count, province_suspected_count, province_cured_count,
+                           province_dead_count, city_name, longitude, latitude, city_location_id,
+                           city_current_confirmed_count, city_confirmed_count, city_suspected_count,
+                           city_cured_count, city_dead_count, update_time]
+                    writer.writerow(row)
 
     csv_file.close()
     print("convert china data done!")
 
 
 def convert_json_to_csv_country(input_file, output_file):
-    # schema = ["continent", "country", "locationId", "longitude", "latitude", "currentConfirmedCount",
-    #           "confirmedCount", "suspectedCount", "curedCount", "deadCount", "updateTime"]
-    csv_file = open(output_file, "a")
+    schema = ["continent", "country", "locationId", "longitude", "latitude", "currentConfirmedCount",
+              "confirmedCount", "suspectedCount", "curedCount", "deadCount", "updateTime"]
+    csv_file = open(output_file, "w+")
     writer = csv.writer(csv_file)
-    # writer.writerow(schema)
+    writer.writerow(schema)
 
     fp = open("./country_geo_coord.json", "r")
     geo_file = json.load(fp)
