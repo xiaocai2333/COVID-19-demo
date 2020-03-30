@@ -55,5 +55,5 @@ def get_province_geo_coord():
 
 
 if __name__ == "__main__":
-    # get_city_geo_coord()
+    get_city_geo_coord()
     get_province_geo_coord()
