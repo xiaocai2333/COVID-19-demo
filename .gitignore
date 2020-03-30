@@ -1,4 +1,4 @@
-*.csv
+*2020*.csv
 .idea/*
 COVID-*.json
 *.png

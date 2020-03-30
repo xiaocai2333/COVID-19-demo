@@ -1,6 +1,5 @@
 import csv
 import json
-import pandas
 
 from pyspark.sql import SparkSession
 
