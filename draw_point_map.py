@@ -1,19 +1,16 @@
 import datetime
 from arctern.util import save_png
-from arctern.util.vega import vega_pointmap, vega_heatmap, vega_choroplethmap, vega_weighted_pointmap
+from arctern.util.vega import vega_weighted_pointmap
 
 from arctern_pyspark import register_funcs
-from arctern_pyspark import heatmap
-from arctern_pyspark import pointmap
-from arctern_pyspark import choroplethmap
 from arctern_pyspark import weighted_pointmap
 
 from pyspark.sql import SparkSession
 
-country_csv = 'COVID-country-' + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.csv'
-china_csv = 'COVID-china-' + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.csv'
+country_csv = 'COVID-country.csv'
+china_csv = 'COVID-china.csv'
 
-def draw_weighted_point_map(spark):
+def draw_china_weighted_point_map(spark):
     df = spark.read.format("csv").option("header", True).option("delimiter", ",").schema(
         "continent string, country string, province string, provinceLocationId string, "
         "provinceCurrentConfirmedCount int , provinceConfirmedCount int, provinceSuspectedCount int,"
@@ -22,21 +19,91 @@ def draw_weighted_point_map(spark):
         "cityCuredCount int, cityDeadCount int, updateTime timestamp").load(
         china_csv).cache()
 
+    spark.catalog.dropGlobalTempView("COVID_china")
+
     df.createOrReplaceTempView("COVID_china")
-    df.show()
 
     register_funcs(spark)
 
-    res = spark.sql("select ST_Point(longitude, latitude) as point from COVID_china "
-                    "where ST_Within(ST_Point(longitude, latitude), "
-                    "'POLYGON ((71.604264 17.258977, 137.319408 17.258977, 137.319408 53.808533,"
-                    " 71.604264 53.808533, 71.604264 17.258977))')")
-    res.show(200, False)
-    vega = vega_weighted_pointmap(1024, 896, [71.604264, 17.258977, 137.319408, 53.808533],
-                                  "#EEEEEE", [2, 60], [6], 1.0, "EPSG:4326")
+    # 1
+    res1 = spark.sql("select ST_Point(longitude, latitude) as point from COVID_china where ST_Within(ST_Point(longitude, latitude), 'POLYGON ((71.604264 17.258977, 137.319408 17.258977, 137.319408 53.808533, 71.604264 53.808533, 71.604264 17.258977))')")
+    res1.createOrReplaceTempView("res1")
+    res1 = spark.sql("select * from res1 where point != 'POINT (nan nan)' ")
 
-    res = weighted_pointmap(res, vega)
-    save_png(res, './weighted_pointmap_1_0.png')
+    vega1 = vega_weighted_pointmap(1024, 896, [71.604264, 17.258977, 137.319408, 53.808533],
+                                   "#EEEEEE", [2, 60], [6], 1.0, "EPSG:4326")
+    res_png1 = weighted_pointmap(res1, vega1)
+    save_png(res_png1, './weighted_point_map1.png')
+
+    # 2
+    res2 = spark.sql("select ST_Point(longitude, latitude) as point, provinceConfirmedCount as c from COVID_china "
+                     "where ST_Within(ST_Point(longitude, latitude), "
+                     "'POLYGON ((71.604264 17.258977, 137.319408 17.258977, 137.319408 53.808533,"
+                     " 71.604264 53.808533, 71.604264 17.258977))')")
+
+    res2.createOrReplaceTempView("res2")
+    res2 = spark.sql("select * from res2 where point != 'POINT (nan nan)' ")
+
+    vega2 = vega_weighted_pointmap(1024, 896, [71.604264, 17.258977, 137.319408, 53.808533],
+                                   "blue_to_red", [2, 1000], [6], 1.0, "EPSG:4326")
+
+    res_png2 = weighted_pointmap(res2, vega2)
+    save_png(res_png2, './weighted_point_map2.png')
+
+    # 3
+    res3 = spark.sql("select ST_Point(longitude, latitude) as point, provinceConfirmedCount as c, "
+                     "provinceConfirmedCount as s from COVID_china "
+                     "where ST_Within(ST_Point(longitude, latitude), "
+                     "'POLYGON ((71.604264 17.258977, 137.319408 17.258977, 137.319408 53.808533,"
+                     " 71.604264 53.808533, 71.604264 17.258977))')")
+    res3.createOrReplaceTempView("res3")
+    res3 = spark.sql("select * from res3 where point != 'POINT (nan nan)' ")
+
+    vega3 = vega_weighted_pointmap(3000, 2000, [71.604264, 17.258977, 137.319408, 53.808533],
+                                   "blue_to_red", [2, 1000], [5, 1000], 1.0, "EPSG:4326")
+
+    res_png3 = weighted_pointmap(res3, vega3)
+    save_png(res_png3, './weighted_point_map3.png')
+    spark.catalog.dropGlobalTempView("COVID_china")
+
+
+def draw_world_weighted_point_map(spark):
+    df = spark.read.format("csv").option("header", True).option("delimiter", ",").schema(
+        "continent string, country string, locationId string, longitude double, latitude double,"
+        "currentConfirmedCount int, confirmedCount int, suspectedCount int, curedCount int, deadCount int, "
+        "updateTime timestamp").load(country_csv).cache()
+
+    df.createOrReplaceTempView("COVID_country")
+
+    register_funcs(spark)
+
+    # 1
+    res1 = spark.sql("select ST_Point(longitude, latitude) as point from COVID_country ")
+    res1.createOrReplaceTempView("res1")
+    res1 = spark.sql("select * from res1 where point != 'POINT (nan nan)' ")
+    vega1 = vega_weighted_pointmap(3000, 2000, [-289.095983, -73.863121, 289.095983, 73.863121],
+                                   "#EEEEEE", [2, 60], [6], 1.0, "EPSG:4326")
+    res_png1 = weighted_pointmap(res1, vega1)
+    save_png(res_png1, './country_weighted_point_map1.png')
+
+    # 2
+    df = spark.read.format("csv").option("header", True).option("delimiter", ",").schema(
+        "Province string, Country string, Longitude double, Latitude double, ConfirmedCount int,"
+        "DeadCount int, CuredCount int, LastUpdateTime string").load("./data/COVID-data.csv").cache()
+
+    df.createOrReplaceTempView("COVID_country2")
+
+    register_funcs(spark)
+
+    res2 = spark.sql("select ST_Point(Longitude, Latitude) as point from COVID_country2 where LastUpdateTime "
+                     "like '%03-29%'")
+    res2.createOrReplaceTempView("res2")
+    res2 = spark.sql("select * from res2 where point != 'POINT (nan nan)' ")
+    res2.show(100, False)
+    vega2 = vega_weighted_pointmap(3000, 2000, [-289.095983, -73.863121, 289.095983, 73.863121],
+                                   "#EEEEEE", [2, 60], [6], 1.0, "EPSG:4326")
+    res_png2 = weighted_pointmap(res2, vega2)
+    save_png(res_png2, './country_weighted_point_map2.png')
 
 
 if __name__ == "__main__":
@@ -47,6 +114,7 @@ if __name__ == "__main__":
 
     spark_session.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
 
-    draw_weighted_point_map(spark_session)
+    draw_china_weighted_point_map(spark_session)
+    draw_world_weighted_point_map(spark_session)
 
     spark_session.stop()

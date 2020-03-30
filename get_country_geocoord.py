@@ -3,7 +3,7 @@ import json
 from pyspark.sql import SparkSession
 
 
-def draw_weighted_point_map(spark):
+def convert_csv_to_json(spark):
     df = spark.read.format("csv").option("header", True).option("delimiter", ",").schema(
         "country string, latitude double, longitude double, name string"
     ).load("./country_geo_coord.csv").cache()
@@ -28,6 +28,6 @@ if __name__ == "__main__":
 
     spark_session.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")
 
-    draw_weighted_point_map(spark_session)
+    convert_csv_to_json(spark_session)
 
     spark_session.stop()
