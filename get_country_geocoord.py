@@ -23,7 +23,7 @@ def convert_csv_to_json(spark):
 if __name__ == "__main__":
     spark_session = SparkSession \
         .builder \
-        .appName("Python Testmap") \
+        .appName("Python GetCountryGeo") \
         .getOrCreate()
 
     spark_session.conf.set("spark.sql.execution.arrow.pyspark.enabled", "true")

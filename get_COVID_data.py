@@ -9,7 +9,6 @@ r = requests.request('GET', url)
 data = r.json()
 data = data['results']
 
-
 china_data = []
 country_data =[]
 
