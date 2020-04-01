@@ -95,13 +95,13 @@ def draw_world_weighted_point_map(spark):
 
     register_funcs(spark)
 
-    res2 = spark.sql("select ST_Point(Longitude, Latitude) as point from COVID_country2 where LastUpdateTime "
-                     "like '%03-29%'")
+    res2 = spark.sql("select ST_Point(Longitude, Latitude) as point, ConfirmedCount as s from COVID_country2 ")
+                     # "where LastUpdateTime like '%03-29%'")
     res2.createOrReplaceTempView("res2")
     res2 = spark.sql("select * from res2 where point != 'POINT (nan nan)' ")
     res2.show(100, False)
     vega2 = vega_weighted_pointmap(3000, 2000, [-289.095983, -73.863121, 289.095983, 73.863121],
-                                   "#EEEEEE", [2, 60], [6], 1.0, "EPSG:4326")
+                                   "#F0356D", [2, 60], [6, 60], 1.0, "EPSG:4326")
     res_png2 = weighted_pointmap(res2, vega2)
     save_png(res_png2, './country_weighted_point_map2.png')
 

@@ -26,8 +26,10 @@ china_dict['data'] = china_data
 country_dict['data'] = country_data
 
 
-fname_country = 'COVID-country-' + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.json'
-fname_china = 'COVID-china-' + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.json'
+fname_country = './DingXiang-COVID-data/COVID-country-data/' + 'COVID-country-' \
+                + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.json'
+fname_china = './DingXiang-COVID-data/COVID-china-data/' + 'COVID-china-' \
+              + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.json'
 
 with open(fname_country,'w',encoding='utf-8') as f:
     json.dump(country_dict,f,ensure_ascii=False,indent = 4)

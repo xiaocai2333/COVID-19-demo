@@ -4,7 +4,7 @@ import json
 import requests
 import time
 
-my_api_key = "XXXXXXXXXXXXXXXXXXXXXXXXXXX"
+my_api_key = "d93cf23be9f207f17d4bfe48619f386d"
 def convert_json_to_csv_china(input_file, output_file):
     schema = ["continent", "country", "province", "provinceLocationId", "provinceCurrentConfirmedCount",
               "provinceConfirmedCount", "provinceSuspectedCount", "provinceCuredCount", "provinceDeadCount",
@@ -14,7 +14,7 @@ def convert_json_to_csv_china(input_file, output_file):
     writer = csv.writer(csv_file)
     writer.writerow(schema)
 
-    fp = open("./china_geo_coord.json", "r")
+    fp = open("./china_city_geo_coord.json", "r")
     china_geo_coord = json.load(fp)
     with open(input_file, "r") as json_file:
         data = json.load(json_file)["data"]
@@ -111,8 +111,8 @@ def convert_json_to_csv_country(input_file, output_file):
                 longitude = "null"
                 latitude = "null"
 
-            row = [continent, country, location_id, longitude, latitude, current_confirmed_count, confirmed_count, suspected_count,
-                   cured_count, dead_count, update_time]
+            row = [continent, country, location_id, longitude, latitude, current_confirmed_count, confirmed_count,
+                   suspected_count, cured_count, dead_count, update_time]
             writer.writerow(row)
 
     csv_file.close()
@@ -120,10 +120,14 @@ def convert_json_to_csv_country(input_file, output_file):
 
 
 if __name__ == "__main__":
-    country_json = 'COVID-country-' + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.json'
-    china_json = 'COVID-china-' + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.json'
-    country_csv = 'COVID-country.csv'
-    china_csv = 'COVID-china.csv'
+    country_json = './DingXiang-COVID-data/COVID-country-data/' + 'COVID-country-' \
+                   + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.json'
+    china_json = './DingXiang-COVID-data/COVID-china-data/' + 'COVID-china-' \
+                 + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.json'
+    country_csv = './DingXiang-COVID-data/COVID-country-data/' + 'COVID-country-' \
+                  + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.csv'
+    china_csv = './DingXiang-COVID-data/COVID-china-data/' + 'COVID-china-' \
+                + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.csv'
 
     convert_json_to_csv_china(china_json, china_csv)
     convert_json_to_csv_country(country_json, country_csv)
