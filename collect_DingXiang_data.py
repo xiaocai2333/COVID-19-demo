@@ -53,6 +53,8 @@ def convert_json_to_csv_china(input_file, writer):
                     else:
                         longitude = result["geocodes"][0]["location"].split(",")[0]
                         latitude = result["geocodes"][0]["location"].split(",")[1]
+                        with open("./null_geo_coord_china_city.csv", "a+") as f:
+                            f.writelines(str(province) + "," + str(longitude) + "," + str(latitude) + "\n")
                 row = [continent, country, province, province_location_id, province_current_confirmed_count,
                        province_confirmed_count, province_suspected_count, province_cured_count, province_dead_count,
                        city_name, longitude, latitude, city_location_id, city_current_confirmed_count,
@@ -77,6 +79,9 @@ def convert_json_to_csv_china(input_file, writer):
                         else:
                             longitude = result["geocodes"][0]["location"].split(",")[0]
                             latitude = result["geocodes"][0]["location"].split(",")[1]
+                            with open("./null_geo_coord_china_city.csv", "a+") as f:
+                                f.writelines(str(province) + "," + str(city_name) + "," +
+                                             str(longitude) + "," + str(latitude) + "\n")
                     city_location_id = city_data["locationId"]
                     city_current_confirmed_count = city_data["currentConfirmedCount"]
                     city_confirmed_count = city_data["confirmedCount"]
@@ -113,7 +118,7 @@ def convert_json_to_csv_country(input_file, writer):
                 longitude = geo_file[country][0]
                 latitude = geo_file[country][1]
             else:
-                with open("./null_geo_coord_china_city.csv", "a+") as f:
+                with open("./null_geo_coord_country.csv", "a+") as f:
                     f.writelines(str(country) + "\n")
                 continue
 
