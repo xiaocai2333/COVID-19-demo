@@ -48,7 +48,7 @@ def convert_json_to_csv_china(input_file, writer):
                     result = result.json()
                     if result["status"] == '0' or result["count"] == '0':
                         with open("./null_geo_coord_china_city.csv", "a+") as f:
-                            f.writelines(province)
+                            f.writelines(str(province) + "\n")
                         continue
                     else:
                         longitude = result["geocodes"][0]["location"].split(",")[0]
@@ -72,7 +72,7 @@ def convert_json_to_csv_china(input_file, writer):
                         result = result.json()
                         if result["status"] == '0' or result["count"] == '0':
                             with open("./null_geo_coord_china_city.csv", "a+") as f:
-                                f.writelines(city_name)
+                                f.writelines(str(city_name) + "\n")
                             continue
                         else:
                             longitude = result["geocodes"][0]["location"].split(",")[0]
@@ -89,8 +89,6 @@ def convert_json_to_csv_china(input_file, writer):
                            city_current_confirmed_count, city_confirmed_count, city_suspected_count,
                            city_cured_count, city_dead_count, update_time]
                     writer.writerow(row)
-
-    print("convert china data done!")
 
 
 def convert_json_to_csv_country(input_file, writer):
@@ -116,14 +114,12 @@ def convert_json_to_csv_country(input_file, writer):
                 latitude = geo_file[country][1]
             else:
                 with open("./null_geo_coord_china_city.csv", "a+") as f:
-                    f.writelines(country)
+                    f.writelines(str(country) + "\n")
                 continue
 
             row = [continent, country, location_id, longitude, latitude, current_confirmed_count, confirmed_count,
                    suspected_count, cured_count, dead_count, update_time]
             writer.writerow(row)
-
-    print("convert country data done!")
 
 
 if __name__ == "__main__":
@@ -147,7 +143,7 @@ if __name__ == "__main__":
                         "cityName", "longitude", "latitude", "cityLocationId", "cityCurrentConfirmedCount",
                         "cityConfirmedCount", "citySuspectedCount", "cityCuredCount", "cityDeadCount", "updateTime"]
         china_fp = open(china_output_file, "w+")
-        china_writer = csv.writer()
+        china_writer = csv.writer(china_fp)
         china_writer.writerow(china_schema)
 
         country_schema = ["continent", "country", "locationId", "longitude", "latitude", "currentConfirmedCount",
@@ -158,8 +154,11 @@ if __name__ == "__main__":
 
         for china_file in china_file_list:
             convert_json_to_csv_china(china_data_path + china_file, china_writer)
+        print("convert china data done!")
+
         for country_file in country_file_list:
             convert_json_to_csv_country(country_data_path + country_file, country_writer)
+        print("convert country data done!")
 
         china_fp.close()
         country_fp.close()

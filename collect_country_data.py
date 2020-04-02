@@ -45,7 +45,7 @@ def collect_row_data_1(input_file, csv_writer, is_time_valid):
         else:
             with open("./null_geo_coord_country.csv", "a+") as f:
                 country_row = country + "," + province
-                f.writelines(country_row)
+                f.writelines(country_row + "\n")
             continue
         confirmed_count = csv_df["Confirmed"][line_num]
         if math.isnan(confirmed_count):
