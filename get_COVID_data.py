@@ -1,6 +1,5 @@
 import requests
-import pandas as pd
-import datetime
+import time
 import json
 
 url = 'https://lab.isaaclin.cn/nCoV/api/area'
@@ -26,9 +25,9 @@ country_dict['data'] = country_data
 
 
 fname_country = './DingXiang-COVID-data/COVID-country-data/' + 'COVID-country-' \
-                + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.json'
+                + str(time.strftime('%Y-%m-%d', time.localtime(time.time()))) + '.json'
 fname_china = './DingXiang-COVID-data/COVID-china-data/' + 'COVID-china-' \
-              + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.json'
+              + str(time.strftime('%Y-%m-%d', time.localtime(time.time()))) + '.json'
 
 with open(fname_country,'w',encoding='utf-8') as f:
     json.dump(country_dict,f,ensure_ascii=False,indent = 4)
