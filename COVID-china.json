@@ -1,18 +1,26 @@
 {
-    "db_name": "COVID-china",
+    "db_name": "COVID",
     "type": "spark",
     "spark": {
         "app_name": "arctern",
         "master-addr": "yarn",
-        "PYSPARK_PYTHON": "/home/zc/miniconda3/envs/arctern/bin/python",
+        "configs":{
+            "spark.executorEnv.GDAL_DATA": "/home/zilliz/miniconda3/envs/gui/share/gdal",
+            "spark.executorEnv.PROJ_LIB": "/home/zilliz/miniconda3/envs/gui/share/proj"
+        },
         "envs": {
+            "PYSPARK_PYTHON": "/home/zilliz/miniconda3/envs/gui/bin/python",
+            "PYSPARK_DRIVER_PYTHON": "/home/zilliz/miniconda3/envs/gui/bin/python",
+            "JAVA_HOME": "/usr/lib/jvm/java-8-openjdk-amd64",
+            "HADOOP_CONF_DIR": "/home/zilliz/hadoop-2.7.7/etc/hadoop",
+            "YARN_CONF_DIR": "/home/zilliz/hadoop-2.7.7/etc/hadoop"
         }
     },
     "tables": [
         {
             "name": "COVID_china",
             "format": "csv",
-            "path": "/home/zc/work/COVID-19-demo/data/COVID-data.csv",
+            "path": "hdfs:///data/COVID-china-data.csv",
             "options": {
                 "header": "True",
                 "delimiter": ","
