@@ -178,7 +178,9 @@ if __name__ == "__main__":
         china_writer = csv.writer(china_fp)
         country_writer = csv.writer(country_fp)
         convert_json_to_csv_china(china_data_path + china_file, china_writer)
+        print("append china data done")
         convert_json_to_csv_country(country_data_path + country_file, country_writer)
+        print("append country data done")
 
         china_fp.close()
         country_fp.close()
