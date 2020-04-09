@@ -1,0 +1,49 @@
+{
+    "db_name": "COVID-china",
+    "type": "spark",
+    "spark": {
+        "app_name": "arctern",
+        "master-addr": "local[*]",
+        "PYSPARK_PYTHON": "/home/zc/miniconda3/envs/arctern/bin/python",
+       "envs": {
+        }
+    },
+    "tables": [
+        {
+            "name": "COVID_china",
+            "format": "csv",
+            "path": "/home/zc/work/COVID-19-demo/COVID-china-data.csv",
+            "options": {
+                "header": "True",
+                "delimiter": ","
+            },
+            "schema": [
+                {"continent":  "string"},
+                {"country": "string"},
+                {"province": "string"},
+                {"provinceLocationId": "long"},
+                {"provinceCurrentConfirmedCount": "int"},
+                {"provinceConfirmedCount": "int"},
+                {"provinceSuspectedCount": "int"},
+                {"provinceCuredCount": "int"},
+                {"provinceDeadCount": "int"},
+                {"cityName": "string"},
+                {"longitude": "double"},
+                {"latitude": "double"},
+                {"cityLocationId": "long"},
+                {"cityCurrentConfirmedCount": "int"},
+                {"cityConfirmedCount": "int"},
+                {"citySuspectedCount": "int"},
+                {"cityCuredCount": "int"},
+                {"cityDeadCount": "int"},
+                {"updateTime": "date"}
+            ],
+            "visibility": "False"
+        },
+        {
+            "name": "china",
+            "sql": "select * from global_temp.COVID_china",
+            "visibility": "True"
+        }
+    ]
+}

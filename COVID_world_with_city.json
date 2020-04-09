@@ -1,5 +1,5 @@
 {
-    "db_name": "COVID",
+    "db_name": "COVID-world-with-city",
     "type": "spark",
     "spark": {
         "app_name": "arctern",
@@ -10,7 +10,7 @@
     },
     "tables": [
         {
-            "name": "COVID_china",
+            "name": "COVID-world-with-city",
             "format": "csv",
             "path": "/home/zc/work/COVID-19-demo/data/COVID-data.csv",
             "options": {
@@ -30,8 +30,8 @@
             "visibility": "False"
         },
         {
-            "name": "COVID",
-            "sql": "select * from global_temp.COVID_china where LastUpdate like '%03-28%' and Longitude is not null",
+            "name": "world_with_city",
+            "sql": "select * from global_temp.COVID-world-with-city",
             "visibility": "True"
         }
     ]

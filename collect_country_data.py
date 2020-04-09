@@ -131,9 +131,10 @@ if __name__ == "__main__":
         rewrite = True
     else:
         rewrite = False
+
+    output_file = "./COVID_country_with_city_data.csv"
     if rewrite:
         file_list = os.listdir("./data")
-        output_file = "./COVID-data.csv"
 
         schema = ["Country", "Province", "Longitude", "Latitude", "ConfirmedCount", "DeadCount",
                   "CuredCount", "LastUpdateTime"]
@@ -157,7 +158,6 @@ if __name__ == "__main__":
         csv_file.close()
     else:
         file = str(time.strftime('%m-%d-%Y', time.localtime(time.time()))) + '.csv'
-        output_file = "./COVID-data.csv"
         csv_file = open(output_file, "a+")
         writer = csv.writer(csv_file)
 
