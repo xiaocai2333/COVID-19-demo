@@ -133,8 +133,9 @@ if __name__ == "__main__":
         rewrite = False
 
     output_file = "./COVID_country_with_city_data.csv"
+    data_path = "/home/zc/work/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports"
     if rewrite:
-        file_list = os.listdir("./data")
+        file_list = os.listdir(data_path)
 
         schema = ["Country", "Province", "Longitude", "Latitude", "ConfirmedCount", "DeadCount",
                   "CuredCount", "LastUpdateTime"]
@@ -144,16 +145,18 @@ if __name__ == "__main__":
         writer.writerow(schema)
 
         for file in file_list:
+            if file in ["README.md", ".gitignore"]:
+                continue
             time_valid = False
             if file.startswith("01") or file.startswith("02-01"):
-                collect_row_data_1("./data/" + file, writer, time_valid)
+                collect_row_data_1(data_path + "/" + file, writer, time_valid)
             elif file.startswith("02"):
                 time_valid = True
-                collect_row_data_1("./data/" + file, writer, time_valid)
+                collect_row_data_1(data_path + "/" + file, writer, time_valid)
             elif file.startswith("03-0") or file.startswith("03-1") or file.startswith("03-20") or file.startswith("03-21"):
-                collect_row_data_2("./data/" + file, writer)
+                collect_row_data_2(data_path + "/" + file, writer)
             else:
-                collect_row_data_3("./data/" + file, writer)
+                collect_row_data_3(data_path + "/" + file, writer)
 
         csv_file.close()
     else:
@@ -161,7 +164,7 @@ if __name__ == "__main__":
         csv_file = open(output_file, "a+")
         writer = csv.writer(csv_file)
 
-        collect_row_data_3("./data/" + file, writer)
+        collect_row_data_3(data_path + "/" + file, writer)
 
         csv_file.close()
 
