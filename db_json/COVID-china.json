@@ -1,0 +1,57 @@
+{
+    "db_name": "COVID",
+    "type": "spark",
+    "spark": {
+        "app_name": "arctern",
+        "master-addr": "yarn",
+        "configs":{
+            "spark.executorEnv.GDAL_DATA": "/home/zilliz/miniconda3/envs/gui/share/gdal",
+            "spark.executorEnv.PROJ_LIB": "/home/zilliz/miniconda3/envs/gui/share/proj"
+        },
+        "envs": {
+            "PYSPARK_PYTHON": "/home/zilliz/miniconda3/envs/gui/bin/python",
+            "PYSPARK_DRIVER_PYTHON": "/home/zilliz/miniconda3/envs/gui/bin/python",
+            "JAVA_HOME": "/usr/lib/jvm/java-8-openjdk-amd64",
+            "HADOOP_CONF_DIR": "/home/zilliz/hadoop-2.7.7/etc/hadoop",
+            "YARN_CONF_DIR": "/home/zilliz/hadoop-2.7.7/etc/hadoop"
+        }
+    },
+    "tables": [
+        {
+            "name": "COVID_china",
+            "format": "csv",
+            "path": "hdfs:///data/COVID-china-data.csv",
+            "options": {
+                "header": "True",
+                "delimiter": ","
+            },
+            "schema": [
+                {"continent":  "string"},
+                {"country": "string"},
+                {"province": "string"},
+                {"provinceLocationId": "long"},
+                {"provinceCurrentConfirmedCount": "int"},
+                {"provinceConfirmedCount": "int"},
+                {"provinceSuspectedCount": "int"},
+                {"provinceCuredCount": "int"},
+                {"provinceDeadCount": "int"},
+                {"cityName": "string"},
+                {"longitude": "double"},
+                {"latitude": "double"},
+                {"cityLocationId": "long"},
+                {"cityCurrentConfirmedCount": "int"},
+                {"cityConfirmedCount": "int"},
+                {"citySuspectedCount": "int"},
+                {"cityCuredCount": "int"},
+                {"cityDeadCount": "int"},
+                {"updateTime": "date"}
+            ],
+            "visibility": "False"
+        },
+        {
+            "name": "china",
+            "sql": "select * from global_temp.COVID_china",
+            "visibility": "True"
+        }
+    ]
+}
