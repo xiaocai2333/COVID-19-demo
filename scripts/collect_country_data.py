@@ -28,6 +28,8 @@ def collect_row_data_1(input_file, csv_writer, is_time_valid):
     country_geo_coord_file = open("../geo_data/country_geo_coord.json", "r")
     country_geo_coord = json.load(country_geo_coord_file)
     csv_df = pd.read_csv(input_file)
+    null_geo_file = open('../geo_data/null_geo_coord_country.csv', 'a+')
+    null_geo_writer = csv.writer(null_geo_file)
     for line_num in range(len(csv_df)):
         province = csv_df["Province/State"][line_num]
         if csv_df["Country/Region"][line_num] in ["Mainland China", "Hong Kong", "Taiwan", "Macau"]:
@@ -43,9 +45,8 @@ def collect_row_data_1(input_file, csv_writer, is_time_valid):
             longitude = country_geo_coord[country][0]
             latitude = country_geo_coord[country][1]
         else:
-            with open("../geo_data/null_geo_coord_country.csv", "a+") as f:
-                country_row = country + "," + province
-                f.writelines(country_row + "\n")
+            country_row = [country, province]
+            null_geo_writer.writerow(country_row)
             continue
         confirmed_count = csv_df["Confirmed"][line_num]
         if math.isnan(confirmed_count):

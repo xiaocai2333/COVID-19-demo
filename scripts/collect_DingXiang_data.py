@@ -118,7 +118,7 @@ def convert_json_to_csv_country(input_file, writer):
                 latitude = geo_file[country][1]
             else:
                 with open("../geo_data/null_geo_coord_country.csv", "a+") as f:
-                    f.writelines(str(country) + "\n")
+                    f.writelines(str(country) + ",\n")
                 continue
 
             row = [continent, country, location_id, longitude, latitude, current_confirmed_count, confirmed_count,
