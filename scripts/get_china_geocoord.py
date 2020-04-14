@@ -24,9 +24,10 @@ def get_city_geo_coord():
                 else:
                     longitude = result["geocodes"][0]["location"].split(",")[0]
                     latitude = result["geocodes"][0]["location"].split(",")[1]
+                    latitude = result["geocodes"][0]["location"].split(",")[1]
                 geo_coord_result[city_name] = [longitude, latitude]
 
-    with open("../data_json/china_city_geo_coord.json", "w", encoding='utf-8') as f:
+    with open("../geo_data/china_city_geo_coord.json", "w", encoding='utf-8') as f:
         json.dump(geo_coord_result, f, ensure_ascii=False, indent=4, sort_keys=True)
 
 
@@ -47,7 +48,7 @@ def get_province_geo_coord():
                 latitude = result["geocodes"][0]["location"].split(",")[1]
             geo_coord_result[province_chinese_name] = [longitude, latitude]
 
-    with open("../data_json/china_province_geo_coord.json", "w", encoding='utf-8') as f:
+    with open("../geo_data/china_province_geo_coord.json", "w", encoding='utf-8') as f:
         json.dump(geo_coord_result, f, ensure_ascii=False, indent=4, sort_keys=True)
 
 

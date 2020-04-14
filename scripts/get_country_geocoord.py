@@ -6,7 +6,7 @@ from pyspark.sql import SparkSession
 def convert_csv_to_json(spark):
     df = spark.read.format("csv").option("header", True).option("delimiter", ",").schema(
         "country string, latitude double, longitude double, name string"
-    ).load("../data/country_geo_coord.csv").cache()
+    ).load("../geo_data/country_geo_coord.csv").cache()
 
     df.createOrReplaceTempView("geo_data")
     df.show()

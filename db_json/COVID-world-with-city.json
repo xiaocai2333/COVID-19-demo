@@ -12,7 +12,7 @@
         {
             "name": "world_with_city",
             "format": "csv",
-            "path": "/home/zc/work/COVID-19-demo/data/COVID-data.csv",
+            "path": "/home/zc/work/COVID-19-demo/data/COVID-country-with-city-data.csv",
             "options": {
                 "header": "True",
                 "delimiter": ","

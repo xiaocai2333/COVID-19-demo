@@ -23,9 +23,9 @@ def convert_str_to_time(string):
 
 
 def collect_row_data_1(input_file, csv_writer, is_time_valid):
-    china_geo_coord_file = open("../data_json/china_province_geo_coord.json", "r")
+    china_geo_coord_file = open("../geo_data/china_province_geo_coord.json", "r")
     china_geo_coord = json.load(china_geo_coord_file)
-    country_geo_coord_file = open("../data_json/country_geo_coord.json", "r")
+    country_geo_coord_file = open("../geo_data/country_geo_coord.json", "r")
     country_geo_coord = json.load(country_geo_coord_file)
     csv_df = pd.read_csv(input_file)
     for line_num in range(len(csv_df)):
@@ -43,7 +43,7 @@ def collect_row_data_1(input_file, csv_writer, is_time_valid):
             longitude = country_geo_coord[country][0]
             latitude = country_geo_coord[country][1]
         else:
-            with open("./null_geo_coord_country.csv", "a+") as f:
+            with open("../geo_data/null_geo_coord_country.csv", "a+") as f:
                 country_row = country + "," + province
                 f.writelines(country_row + "\n")
             continue
@@ -132,7 +132,7 @@ if __name__ == "__main__":
     else:
         rewrite = False
 
-    output_file = "../data/COVID_country_with_city_data.csv"
+    output_file = "../data/COVID-country-with-city-data.csv"
     data_path = "/home/zc/work/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports"
     if rewrite:
         file_list = os.listdir(data_path)
