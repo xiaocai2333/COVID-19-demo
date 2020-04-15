@@ -2,7 +2,7 @@
 import json
 import requests
 
-my_api_key = "d93cf23be9f207f17d4bfe48619f386d"
+my_api_key = "XXXXXXXXXXXXXXXXXXXXXXXXXXX"
 
 
 def get_city_geo_coord():
