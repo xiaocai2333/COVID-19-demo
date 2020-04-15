@@ -1,7 +1,7 @@
 # 文档说明
 本文档主要介绍如何在本机部署demo。主要有以下几个步骤：
     
-   首先要安装spark，下载[Arctern](https://github.com/zilliztech/arctern)，下载[infini-client](https://github.com/zilliztech/infini-client),
+   首先要安装spark，安装arctern，安装arctern_server,下载[infini-client](https://github.com/zilliztech/infini-client)
    
    其次启动webservice服务端和客户端，将数据导入到数据库中。
     
@@ -18,7 +18,11 @@
     https://github.com/zilliztech/arctern-docs/blob/master/install_arctern_on_spark_en.md
 
 ### 启动webservice服务
-   首先要下载json文件，在[db_json](./db_json)目录下。具体格式参照[COVID-china-local.json](./db_json/COVID-china-local.json)。下面展示了各个字段的意义（如要复制，请先删除注释）：
+   使用pip安装arctern_server:
+   ```shell script
+    pip install arctern_server
+```
+   下载json文件，在[db_json](./db_json)目录下。具体格式参照[COVID-china-local.json](./db_json/COVID-china-local.json)。下面展示了各个字段的意义（如要复制，请先删除注释）：
    ```json
 {
     "db_name": "db2", //数据库name
@@ -70,10 +74,17 @@
     ]
 }
 ```
-   
-   进入arctern/gui/server目录下,执行以下命令来启动服务：
+   然后编写Python文件以启动服务，Python文件（例arctern_server.py）的内容如下：
+  ```python
+    import sys
+    from server import manage
+    
+    if __name__ == "__main__":
+        manage.main(sys.argv)
+```
+   运行编写好的Python文件来启动服务：
   ```shell script
-    python manage.py -r -c path/to/COVID-china-local.json
+    python arctern_server.py -r -c path/to/COVID-china-local.json
   ```
 其中命令行参数说明如下：
 ```
@@ -87,7 +98,7 @@
 ```
 可以在启动服务时指定port（默认port是8080），若指定了port，在下一步启动客户端时需要修改port与你指定的一致。
 
-如果想对数据库进行更多的操作（如查询等），请参考：
+如果想对数据库进行更多的操作（如启动服务后需加载数据），请参考：
 ```
     https://github.com/zilliztech/arctern/blob/master/gui/server/README.md
 ```
