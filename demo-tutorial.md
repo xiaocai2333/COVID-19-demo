@@ -22,7 +22,7 @@
    ```shell script
     pip install arctern_server
 ```
-   下载json文件，在[arctern-resources](https://github.com/zilliztech/arctern-resources/tree/master/benchmarks/dataset/COVID-19/json)项目中。具体格式参照[COVID-china.json](https://github.com/zilliztech/arctern-resources/blob/master/benchmarks/dataset/COVID-19/json/COVID-china.json)。下面展示了各个字段的意义（如要复制，请先删除注释）：
+   下载json文件，在[arctern-resources](https://github.com/zilliztech/arctern-resources/tree/benchmarks/benchmarks/dataset/COVID-19/json)项目中。具体格式参照[COVID-china.json](https://github.com/zilliztech/arctern-resources/blob/benchmarks/benchmarks/dataset/COVID-19/json/COVID-china.json)。下面展示了各个字段的意义（如要复制，请先删除注释）：
    ```json
 {
     "db_name": "db2", //数据库name

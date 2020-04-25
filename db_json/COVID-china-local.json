@@ -36,13 +36,13 @@
                 {"citySuspectedCount": "int"},
                 {"cityCuredCount": "int"},
                 {"cityDeadCount": "int"},
-                {"updateTime": "string"}
+                {"updateTime": "date"}
             ],
             "visibility": "False"
         },
         {
             "name": "china",
-            "sql": "select longitude, latitude from local_china",
+            "sql": "select * from local_china",
             "visibility": "True"
         }
     ]
