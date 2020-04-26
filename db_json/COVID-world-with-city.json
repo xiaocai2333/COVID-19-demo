@@ -12,14 +12,15 @@
         {
             "name": "world_with_city",
             "format": "csv",
-            "path": "/home/zc/work/COVID-19-demo/data/COVID-country-with-city-data.csv",
+            "path": "/home/zc/work/COVID-19-demo/data/daily_country_data/04-24-2020.csv.csv",
             "options": {
                 "header": "True",
                 "delimiter": ","
             },
             "schema": [
-                {"Province": "string"},
                 {"Country": "string"},
+                {"Province": "string"},
+                {"City":  "string"},
                 {"Longitude": "double"},
                 {"Latitude": "double"},
                 {"ConfirmedCount": "int"},
