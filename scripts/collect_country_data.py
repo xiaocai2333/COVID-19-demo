@@ -23,12 +23,12 @@ def convert_str_to_time(string):
 
 
 def collect_row_data_1(input_file, csv_writer, is_time_valid):
-    china_geo_coord_file = open("../geo_data/china_province_geo_coord.json", "r")
+    china_geo_coord_file = open("../geo_coord/china_province_geo_coord.json", "r")
     china_geo_coord = json.load(china_geo_coord_file)
-    country_geo_coord_file = open("../geo_data/country_geo_coord.json", "r")
+    country_geo_coord_file = open("../geo_coord/country_geo_coord.json", "r")
     country_geo_coord = json.load(country_geo_coord_file)
     csv_df = pd.read_csv(input_file)
-    null_geo_file = open('../geo_data/null_geo_coord_country.csv', 'a+')
+    null_geo_file = open('../geo_coord/null_geo_coord_country.csv', 'a+')
     null_geo_writer = csv.writer(null_geo_file)
     for line_num in range(len(csv_df)):
         province = csv_df["Province/State"][line_num]
@@ -111,6 +111,7 @@ def collect_row_data_3(input_file, csv_writer):
         longitude = csv_df["Long_"][line_num]
         latitude = csv_df["Lat"][line_num]
         confirmed_count = csv_df["Confirmed"][line_num]
+        city = csv_df["Admin2"][line_num]
         if math.isnan(confirmed_count):
             confirmed_count = 0
         dead_count = csv_df["Deaths"][line_num]
@@ -121,53 +122,101 @@ def collect_row_data_3(input_file, csv_writer):
             cured_count = 0
         last_update_time = csv_df["Last_Update"][line_num].replace("T", " ")
 
-        result_row = [country, province, longitude, latitude, confirmed_count,
+        result_row = [country, province, city, longitude, latitude, confirmed_count,
                       dead_count, cured_count, last_update_time]
         csv_writer.writerow(result_row)
 
 
 if __name__ == "__main__":
     opt = sys.argv[-1]
+    rewrite = False
+    daily = False
     if opt == '-r':
         rewrite = True
-    else:
-        rewrite = False
+    if opt == '-d':
+        daily = True
 
-    output_file = "../data/COVID-country-with-city-data.csv"
-    data_path = "/home/zc/work/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports"
-    if rewrite:
+    if daily:
+        data_path = "/home/zc/work/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports"
         file_list = os.listdir(data_path)
-
-        schema = ["Country", "Province", "Longitude", "Latitude", "ConfirmedCount", "DeadCount",
-                  "CuredCount", "LastUpdateTime"]
-
-        csv_file = open(output_file, "w+")
-        writer = csv.writer(csv_file)
-        writer.writerow(schema)
-
         for file in file_list:
             if file in ["README.md", ".gitignore"]:
                 continue
+            output_file = "../data/daily_country_data/" + str(file) + ".csv"
+
             time_valid = False
             if file.startswith("01") or file.startswith("02-01"):
+                schema = ["Country", "Province", "Longitude", "Latitude", "ConfirmedCount", "DeadCount",
+                          "CuredCount", "LastUpdateTime"]
+
+                csv_file = open(output_file, "w+")
+                writer = csv.writer(csv_file)
+                writer.writerow(schema)
                 collect_row_data_1(data_path + "/" + file, writer, time_valid)
             elif file.startswith("02"):
                 time_valid = True
+                schema = ["Country", "Province", "Longitude", "Latitude", "ConfirmedCount", "DeadCount",
+                          "CuredCount", "LastUpdateTime"]
+
+                csv_file = open(output_file, "w+")
+                writer = csv.writer(csv_file)
+                writer.writerow(schema)
                 collect_row_data_1(data_path + "/" + file, writer, time_valid)
-            elif file.startswith("03-0") or file.startswith("03-1") or file.startswith("03-20") or file.startswith("03-21"):
+            elif file.startswith("03-0") or file.startswith("03-1") or file.startswith("03-20") \
+                    or file.startswith("03-21"):
+                schema = ["Country", "Province", "Longitude", "Latitude", "ConfirmedCount", "DeadCount",
+                          "CuredCount", "LastUpdateTime"]
+
+                csv_file = open(output_file, "w+")
+                writer = csv.writer(csv_file)
+                writer.writerow(schema)
                 collect_row_data_2(data_path + "/" + file, writer)
             else:
+                schema = ["Country", "Province", "City", "Longitude", "Latitude", "ConfirmedCount", "DeadCount",
+                          "CuredCount", "LastUpdateTime"]
+
+                csv_file = open(output_file, "w+")
+                writer = csv.writer(csv_file)
+                writer.writerow(schema)
                 collect_row_data_3(data_path + "/" + file, writer)
-
-        csv_file.close()
+            csv_file.close()
+        print("collect data done!")
     else:
-        file = str(time.strftime('%m-%d-%Y', time.localtime(time.time()))) + '.csv'
-        csv_file = open(output_file, "a+")
-        writer = csv.writer(csv_file)
+        output_file = "../data/summary_data/COVID-country-with-city-data.csv"
+        data_path = "/home/zc/work/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports"
+        if rewrite:
+            file_list = os.listdir(data_path)
 
-        collect_row_data_3(data_path + "/" + file, writer)
+            schema = ["Country", "Province", "Longitude", "Latitude", "ConfirmedCount", "DeadCount",
+                      "CuredCount", "LastUpdateTime"]
 
-        csv_file.close()
+            csv_file = open(output_file, "w+")
+            writer = csv.writer(csv_file)
+            writer.writerow(schema)
 
-    print("collect data done!")
+            for file in file_list:
+                if file in ["README.md", ".gitignore"]:
+                    continue
+                time_valid = False
+                if file.startswith("01") or file.startswith("02-01"):
+                    collect_row_data_1(data_path + "/" + file, writer, time_valid)
+                elif file.startswith("02"):
+                    time_valid = True
+                    collect_row_data_1(data_path + "/" + file, writer, time_valid)
+                elif file.startswith("03-0") or file.startswith("03-1") or file.startswith("03-20") or file.startswith("03-21"):
+                    collect_row_data_2(data_path + "/" + file, writer)
+                else:
+                    collect_row_data_3(data_path + "/" + file, writer)
+
+            csv_file.close()
+        else:
+            file = str(time.strftime('%m-%d-%Y', time.localtime(time.time()))) + '.csv'
+            csv_file = open(output_file, "a+")
+            writer = csv.writer(csv_file)
+
+            collect_row_data_3(data_path + "/" + file, writer)
+
+            csv_file.close()
+
+        print("collect data done!")
 

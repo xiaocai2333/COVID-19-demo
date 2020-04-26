@@ -12,7 +12,7 @@ country_csv = '../DingXiang-COVID-data/COVID-country-data/' + 'COVID-country-' \
               + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.csv'
 china_csv = '../DingXiang-COVID-data/COVID-china-data/' + 'COVID-china-' \
             + str(datetime.datetime.now().month) + str(datetime.datetime.now().day) + '.csv'
-country_with_province_csv = "../data/COVID-country-with-city-data.csv"
+country_with_province_csv = "../data/summary/COVID-country-with-city-data.csv"
 
 
 def draw_china_weighted_point_map(spark):
