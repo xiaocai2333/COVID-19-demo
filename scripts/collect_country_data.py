@@ -23,12 +23,12 @@ def convert_str_to_time(string):
 
 
 def collect_row_data_1(input_file, csv_writer, is_time_valid):
-    china_geo_coord_file = open("../geo_data/china_province_geo_coord.json", "r")
+    china_geo_coord_file = open("../geo_coord/china_province_geo_coord.json", "r")
     china_geo_coord = json.load(china_geo_coord_file)
-    country_geo_coord_file = open("../geo_data/country_geo_coord.json", "r")
+    country_geo_coord_file = open("../geo_coord/country_geo_coord.json", "r")
     country_geo_coord = json.load(country_geo_coord_file)
     csv_df = pd.read_csv(input_file)
-    null_geo_file = open('../geo_data/null_geo_coord_country.csv', 'a+')
+    null_geo_file = open('../geo_coord/null_geo_coord_country.csv', 'a+')
     null_geo_writer = csv.writer(null_geo_file)
     for line_num in range(len(csv_df)):
         province = csv_df["Province/State"][line_num]
@@ -142,7 +142,7 @@ if __name__ == "__main__":
         for file in file_list:
             if file in ["README.md", ".gitignore"]:
                 continue
-            output_file = "../daily_country_data/" + str(file) + ".csv"
+            output_file = "../data/daily_country_data/" + str(file) + ".csv"
 
             time_valid = False
             if file.startswith("01") or file.startswith("02-01"):
@@ -182,7 +182,7 @@ if __name__ == "__main__":
             csv_file.close()
         print("collect data done!")
     else:
-        output_file = "../data/COVID-country-with-city-data.csv"
+        output_file = "../data/summary_data/COVID-country-with-city-data.csv"
         data_path = "/home/zc/work/COVID-19/csse_covid_19_data/csse_covid_19_daily_reports"
         if rewrite:
             file_list = os.listdir(data_path)
