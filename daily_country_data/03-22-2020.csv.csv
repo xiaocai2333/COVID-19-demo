@@ -1,4 +1,4 @@
-Country,Province,city,Longitude,Latitude,ConfirmedCount,DeadCount,CuredCount,LastUpdateTime
+Country,Province,City,Longitude,Latitude,ConfirmedCount,DeadCount,CuredCount,LastUpdateTime
 US,New York,New York City,-73.97152637,40.767272600000005,9654,63,0,3/22/20 23:45
 US,New York,Nassau,-73.58941873,40.74066522,1900,4,0,3/22/20 23:45
 US,New York,Westchester,-73.75741653,41.16278376,1873,0,0,3/22/20 23:45

@@ -1,4 +1,4 @@
-Country,Province,city,Longitude,Latitude,ConfirmedCount,DeadCount,CuredCount,LastUpdateTime
+Country,Province,City,Longitude,Latitude,ConfirmedCount,DeadCount,CuredCount,LastUpdateTime
 US,South Carolina,Abbeville,-82.46170658,34.22333378,10,0,0,2020-04-16 23:30:51
 US,Louisiana,Acadia,-92.41419698,30.2950649,108,6,0,2020-04-16 23:30:51
 US,Virginia,Accomack,-75.63234615,37.76707161,19,0,0,2020-04-16 23:30:51
