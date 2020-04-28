@@ -74,17 +74,9 @@
     ]
 }
 ```
-   然后编写Python文件以启动服务，Python文件（例arctern_server.py）的内容如下：
-  ```python
-    import sys
-    from server import manage
-    
-    if __name__ == "__main__":
-        manage.main(sys.argv)
-```
-   运行编写好的Python文件来启动服务：
+   启动服务：
   ```shell script
-    python arctern_server.py -r -c path/to/COVID-china-local.json
+    arctern-server -r -p 8080-c path/to/COVID-china-local.json
   ```
 其中命令行参数说明如下：
 ```

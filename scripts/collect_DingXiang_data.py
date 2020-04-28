@@ -7,6 +7,10 @@ import sys
 
 my_api_key = "d93cf23be9f207f17d4bfe48619f386d"
 
+def convert_date_to_timestamp(date):
+    ts = time.strftime(date, "%Y-%m-%d %H:%M:%S")
+    timestamp = time.mktime(ts)
+    return timestamp
 
 def convert_json_to_csv_china(input_file, writer):
     fp_city = open("../geo_coord/china_city_geo_coord.json", "r")
@@ -26,8 +30,9 @@ def convert_json_to_csv_china(input_file, writer):
             province_suspected_count = province_data["suspectedCount"]
             province_cured_count = province_data["curedCount"]
             province_dead_count = province_data["deadCount"]
-            local_time = time.localtime(province_data["updateTime"] / 1000.0)
-            update_time = time.strftime("%Y-%m-%d %H:%M:%S", local_time)
+            # local_time = time.localtime(province_data["updateTime"] / 1000.0)
+            # update_time = time.strftime("%Y-%m-%d %H:%M:%S", local_time)
+            update_time = province_data["updateTime"] / 1000.0
             cities = data[i]["cities"]
 
             if len(cities) == 0:
@@ -111,8 +116,9 @@ def convert_json_to_csv_country(input_file, writer):
             suspected_count = province_data["suspectedCount"]
             cured_count = province_data["curedCount"]
             dead_count = province_data["deadCount"]
-            local_time = time.localtime(province_data["updateTime"] / 1000.0)
-            update_time = time.strftime("%Y-%m-%d %H:%M:%S", local_time)
+            # local_time = time.localtime(province_data["updateTime"] / 1000.0)
+            # update_time = time.strftime("%Y-%m-%d %H:%M:%S", local_time)
+            update_time = province_data["updateTime"] / 1000.0
             if country in geo_file:
                 longitude = geo_file[country][0]
                 latitude = geo_file[country][1]
